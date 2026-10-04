@@ -1,0 +1,11 @@
+status,branch,pulse_index,conductance_S,current_A
+synthetic_demo,ltp,0,1e-06,1e-07
+synthetic_demo,ltp,1,2e-06,2e-07
+synthetic_demo,ltp,2,3e-06,3.0000000000000004e-07
+synthetic_demo,ltp,3,4e-06,4e-07
+synthetic_demo,ltp,4,5e-06,5.000000000000001e-07
+synthetic_demo,ltd,0,5e-06,5.000000000000001e-07
+synthetic_demo,ltd,1,4e-06,4e-07
+synthetic_demo,ltd,2,3e-06,3.0000000000000004e-07
+synthetic_demo,ltd,3,2e-06,2e-07
+synthetic_demo,ltd,4,1e-06,1e-07

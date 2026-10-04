@@ -1,0 +1,51 @@
+{
+  "metadata": {
+    "status": "SYNTHETIC_DEMO_NOT_CALIBRATED",
+    "source": "Nature Communications 2024, DOI 10.1038/s41467-024-53321-2",
+    "warning": "All model coefficients below are illustrative, except read_vds_V and reference pulse conditions. No measured curve points imported."
+  },
+  "fetft": {
+    "read_vds_V": 0.1,
+    "ltp_conductance_S": [
+      1e-06,
+      2e-06,
+      3e-06,
+      4e-06,
+      5e-06
+    ],
+    "ltd_conductance_S": [
+      5e-06,
+      4e-06,
+      3e-06,
+      2e-06,
+      1e-06
+    ]
+  },
+  "mpbtft": {
+    "baseline_A": 1e-06,
+    "tau_fast_s": 0.001,
+    "tau_slow_s": 0.01,
+    "increment_A": 8e-07,
+    "capacity_A": 4e-06,
+    "fast_fraction": 0.5,
+    "tg_suppression_per_V": 0.15,
+    "reference_width_s": 0.0001,
+    "reference_bg_V": 4.0
+  },
+  "protocol": {
+    "gap_s": 0.003,
+    "bits": [
+      1,
+      0,
+      1,
+      1
+    ],
+    "tg_V": [
+      5.0,
+      3.0,
+      1.5,
+      0.0
+    ],
+    "timing_convention": "3 ms idle gap after pulse end; confirm against SI before reproduction"
+  }
+}

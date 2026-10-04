@@ -1,0 +1,1 @@
+device,figure,curve_id,point_index,pulse_index,time_s,bg_V,tg_V,pulse_width_s,read_vbg_V,read_vtg_V,read_vds_V,current_A,conductance_S,initial_state,source,status
