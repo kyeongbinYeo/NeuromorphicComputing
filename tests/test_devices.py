@@ -10,7 +10,7 @@ class DeviceChecks(unittest.TestCase):
         old = d.g
         d.advance(1000)
         self.assertEqual(d.g, old)
-        for _ in range(3): d.apply_next_protocol_pulse()
+        for _ in range(len(C['fetft']['ltp_conductance_S']) - 2): d.apply_next_protocol_pulse()
         with self.assertRaises(ValueError): d.apply_next_protocol_pulse()
 
     def test_double_exponential_and_reset(self):

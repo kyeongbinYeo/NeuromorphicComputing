@@ -1,24 +1,48 @@
 {
-  "metadata": {
+  "metadata": { 
     "status": "SYNTHETIC_DEMO_NOT_CALIBRATED",
     "source": "Nature Communications 2024, DOI 10.1038/s41467-024-53321-2",
-    "warning": "All model coefficients below are illustrative, except read_vds_V and reference pulse conditions. No measured curve points imported."
+    "warning": "MPBTFT coefficients are illustrative. FeTFT LTP/LTD tables are measured values from Source data Fig.2!I3:J34; read_vds_V, read_vgs_V and reference pulse conditions are from the paper."
   },
   "fetft": {
     "read_vds_V": 0.1,
+    "read_vgs_V": 1.0,
     "ltp_conductance_S": [
-      1e-06,
-      2e-06,
-      3e-06,
-      4e-06,
-      5e-06
+      1.00387e-7,
+      1.11421e-7,
+      1.23217e-7,
+      1.35490e-7,
+      1.48114e-7,
+      1.60777e-7,
+      1.74256e-7,
+      1.87402e-7,
+      2.00632e-7,
+      2.13586e-7,
+      2.27089e-7,
+      2.40880e-7,
+      2.56120e-7,
+      2.68780e-7,
+      2.81620e-7,
+      2.94100e-7
     ],
     "ltd_conductance_S": [
-      5e-06,
-      4e-06,
-      3e-06,
-      2e-06,
-      1e-06
+      2.94100e-7,
+      2.61250e-7,
+      2.33962e-7,
+      2.12209e-7,
+      1.93465e-7,
+      1.77421e-7,
+      1.64563e-7,
+      1.53307e-7,
+      1.43650e-7,
+      1.34872e-7,
+      1.27372e-7,
+      1.20094e-7,
+      1.13875e-7,
+      1.08229e-7,
+      1.03027e-7,
+      9.81460e-8,
+      9.38470e-8
     ]
   },
   "mpbtft": {

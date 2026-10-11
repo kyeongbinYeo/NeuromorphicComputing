@@ -112,3 +112,43 @@ Fig. 3h,i의 16개 입력열을 모두 비교할 때 reset 조건과 final sampl
 FeTFT는 고정 조건 LTP/LTD 표부터, MPBTFT는 두 지수 감쇠부터 구현하자.
 실측/피팅/가정 파라미터를 표시하고, 첫 완료 기준은 분류 정확도가 아니라
 소자 측정 곡선을 조건에 맞게 따라가는 것으로 잡자.”
+
+=======================================================
+(1)초기 설정 
+python -m pip install -r requirements-plot.txt
+: requirements-plot.txt에 적힌 phython 라이브러리를 설치하라는 뜻임 
+
+(2) python demo.py
+python : Python 실행
+demo.py : 실행할 파일 이름
+이 파일은 소자모델에 입력을 넣고 결과를 계산한다. 
+계산한 전류/conductance와 설정값을 outputs 폴더에 저장 
+
+(3) python plot_results.py
+plot_results.py 라는 Python 파일을 실행
+앞에서 저장한 결과를 읽고, 추가 비교 실험도 계산해서 그래프를 만든다
+그래프 창을 열고, outputs/figures 에 그림 파일을 저장한다
+
+
+=====================================================================
+## FeTFT의 lookup table 재생기 
+
+논문에서 두 소자의 역할 
+MPBTFT = reservoir: 입력 펄스를 받으면 전류가 올라갔다가 시간이 지나면 서서히 빠집니다(휘발성, 단기 기억). 그래서 최근 입력의 "시간 패턴"이 전류 값에 남습니다.
+FeTFT = readout의 가중치(시냅스): 강유전체 분극 덕분에 한 번 정한 컨덕턴스를 오래 유지합니다(비휘발성). 이 컨덕턴스가 신경망의 가중치(weight) 역할을 합니다
+
+## LTP/LTD 표의 의미
+FeTFT에 프로그래밍 펄스를 한 번씩 줄 때마다 컨덕턴스가 한 칸 씩 변화 
+ - LTP(Long-Term Potetiation): 펄스마다 G가 증가한다. 가중치를 올리는 것이다
+ - LTD(Long-Term Depression) : 펄스마다 G가 감소, 가중치를 내리는 것 
+
+ demo.json 의 표는 다음과 같음 
+ ltp_conductance_S: [1e-6, 2e-6, 3e-6, 4e-6, 5e-6]
+                     0번    1번    2번    3번    4번 펄스 후
+"0번째 펄스 후(초기)G는 1us, 1번째 펄스 후 G는 2us ... "라는 뜻이다. 
+
+## "재생기"라고 부른 이유
+보통 소자 모델은 "펄스 전압이 이만큼이면 G가 이렇게 변한다"는 물리 식으로 만든다. 이 코드에는그런 식이 없다. 측정한 곡선의 점들을 표로 저장해두고, 펄스가 오면 다음 칸 값을 꺼낼 줄 뿐이다. 녹음된 곡선을 그대로다시 풀어주는 것과 같아서 재생이라고 한 것이다. 
+def apply_next_protocol_pulse(self):
+    self.index += 1                 # 다음 칸으로
+    self.g = table[self.index]      # 그 칸의 값이 새 컨덕턴스
