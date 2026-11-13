@@ -1,0 +1,423 @@
+{
+  "fig3f": {
+    "absolute_4p0V_uA": {
+      "rmse": 0.09060302129539817,
+      "max_abs_err": 0.29143909105826826,
+      "r2": 0.8114035371495686,
+      "n": 2451
+    },
+    "absolute_note": "Fig.3f and Fig.3h are different measurements (jump ~1.4 vs ~0.86 uA); the model follows Fig.3h, so the absolute offset is a device-to-device difference.",
+    "normalized_shape": {
+      "4.0": {
+        "rmse": 0.014780356917772455,
+        "max_abs_err": 0.07727940081533657,
+        "r2": 0.9898019322342763,
+        "n": 2451
+      },
+      "4.5": {
+        "rmse": 0.010345660536613593,
+        "max_abs_err": 0.05205859795780493,
+        "r2": 0.9970331861963472,
+        "n": 2451
+      }
+    },
+    "per_curve_double_exponential_fit": {
+      "shared_I0_A": 6.673563403264647e-07,
+      "curves": {
+        "3.5": {
+          "A1_A": 5.014130638724542e-07,
+          "tau1_s": 0.00012519610080517416,
+          "A2_A": 4.0142645558242125e-07,
+          "tau2_s": 0.024883095065310674,
+          "excess_at_pulse_end_A": 9.028395194548755e-07,
+          "fast_fraction": 0.5553734114067159,
+          "rmse_uA": 0.021496265334811058,
+          "max_abs_err_uA": 0.0900473916526419,
+          "r2": 0.8631713632172786
+        },
+        "4.0": {
+          "A1_A": 1.1799556477030811e-07,
+          "tau1_s": 0.0009626926193973496,
+          "A2_A": 1.3074476914881786e-06,
+          "tau2_s": 0.01975728868291762,
+          "excess_at_pulse_end_A": 1.4254432562584867e-06,
+          "fast_fraction": 0.08277815637503781,
+          "rmse_uA": 0.020383431614233033,
+          "max_abs_err_uA": 0.11254909416230272,
+          "r2": 0.9904544098335408
+        },
+        "4.5": {
+          "A1_A": 5.587599067827916e-07,
+          "tau1_s": 0.0020939528144214214,
+          "A2_A": 2.5276420195849137e-06,
+          "tau2_s": 0.013003544829407776,
+          "excess_at_pulse_end_A": 3.0864019263677053e-06,
+          "fast_fraction": 0.18103925545445065,
+          "rmse_uA": 0.021357172185251107,
+          "max_abs_err_uA": 0.12279705120360333,
+          "r2": 0.9986727388636336
+        }
+      }
+    }
+  },
+  "state_dependence": {
+    "fig3h": {
+      "pair_jump_uA": {
+        "rmse": 0.04212192135852536,
+        "max_abs_err": 0.10191709375750446,
+        "r2": 0.21808219149365604,
+        "n": 32
+      },
+      "history_check": {
+        "same_state_different_history": [
+          {
+            "id_pre_bin_uA": [
+              0.8999999999999999,
+              1.2999999999999998
+            ],
+            "pulse_index_k": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "mean_jump_uA": [
+              0.8615586249999999,
+              0.8669877500000001,
+              0.834337,
+              0.8030120000000001
+            ]
+          },
+          {
+            "id_pre_bin_uA": [
+              1.2999999999999998,
+              1.6999999999999997
+            ],
+            "pulse_index_k": [
+              1,
+              2,
+              3
+            ],
+            "mean_jump_uA": [
+              0.8404249999999999,
+              0.798145,
+              0.8682266666666667
+            ]
+          },
+          {
+            "id_pre_bin_uA": [
+              1.6999999999999997,
+              2.0999999999999996
+            ],
+            "pulse_index_k": [
+              1,
+              2,
+              3
+            ],
+            "mean_jump_uA": [
+              0.772925,
+              0.7482799999999998,
+              0.77932
+            ]
+          },
+          {
+            "id_pre_bin_uA": [
+              2.099999999999999,
+              2.4999999999999996
+            ],
+            "pulse_index_k": [
+              2,
+              3
+            ],
+            "mean_jump_uA": [
+              0.8553649999999998,
+              0.7707200000000002
+            ]
+          }
+        ],
+        "data_slope_jump_vs_id_pre": -0.05861026316585561,
+        "model_table_slope_first_to_last_knot": -0.06605905554216075
+      }
+    },
+    "fig3i": {
+      "pair_jump_uA": {
+        "rmse": 0.08169147087584923,
+        "max_abs_err": 0.13543003349997368,
+        "r2": 0.7312561202761954,
+        "n": 32
+      }
+    },
+    "fig3j": {
+      "pair_jump_uA": {
+        "rmse": 0.11040141058225095,
+        "max_abs_err": 0.1786930586754799,
+        "r2": 0.5151438404159843,
+        "n": 80
+      }
+    },
+    "note": "Supp. Fig.11 has no source data and was not digitized for v1; the pair-jump test on Fig.3h/3i/3j replaces it."
+  },
+  "fig3h": {
+    "role": "fit (BG table and relaxation were fitted to this figure)",
+    "tg_schedule_V": null,
+    "all_points_uA": {
+      "rmse": 0.034791718577813935,
+      "max_abs_err": 0.09858702875572423,
+      "r2": 0.9972442989957183,
+      "n": 80
+    },
+    "final_state_uA": {
+      "rmse": 0.043473828898232675,
+      "max_abs_err": 0.0819108083832849,
+      "r2": 0.9955280677966684,
+      "n": 16
+    },
+    "rmse_by_pulse_number_uA": [
+      0.017021561960128724,
+      0.02004689741297951,
+      0.030422436429556207,
+      0.05045005751390966,
+      0.043473828898232675
+    ],
+    "final_state_rank_correlation": 0.9970588235294118,
+    "min_gap_between_final_states_uA": {
+      "data": 0.03916999999999993,
+      "model": 0.03861497088952426
+    },
+    "worst_final_sequence": {
+      "bits": "0001",
+      "data_uA": 1.79619,
+      "model_uA": 1.8781008083832849
+    }
+  },
+  "fig3i": {
+    "role": "fit (only the TG gain M(1.5/3/5 V) was fitted to this figure)",
+    "tg_schedule_V": [
+      5.0,
+      3.0,
+      1.5,
+      0.0
+    ],
+    "all_points_uA": {
+      "rmse": 0.06149371218607245,
+      "max_abs_err": 0.14052181740099057,
+      "r2": 0.9852262379787556,
+      "n": 80
+    },
+    "final_state_uA": {
+      "rmse": 0.07195488591057526,
+      "max_abs_err": 0.14052181740099057,
+      "r2": 0.984195845329983,
+      "n": 16
+    },
+    "rmse_by_pulse_number_uA": [
+      0.010156101274295656,
+      0.08011204728612903,
+      0.05488814335240842,
+      0.06477717801487197,
+      0.07195488591057526
+    ],
+    "final_state_rank_correlation": 0.9970588235294118,
+    "min_gap_between_final_states_uA": {
+      "data": 0.043749999999999956,
+      "model": 0.017892791986606538
+    },
+    "worst_final_sequence": {
+      "bits": "1111",
+      "data_uA": 3.13725,
+      "model_uA": 2.9967281825990093
+    }
+  },
+  "fig3j": {
+    "role": "hold-out (not used in any fit; 1.0 V and 2.0 V TG are interpolated)",
+    "tg_schedule_V": [
+      1.0,
+      5.0,
+      3.0,
+      2.0,
+      0.0
+    ],
+    "all_points_uA": {
+      "rmse": 0.08688585445608962,
+      "max_abs_err": 0.22125477100390523,
+      "r2": 0.9750367233322587,
+      "n": 192
+    },
+    "final_state_uA": {
+      "rmse": 0.06449173887128631,
+      "max_abs_err": 0.22125477100390523,
+      "r2": 0.9890436570086446,
+      "n": 32
+    },
+    "rmse_by_pulse_number_uA": [
+      0.01805842673059796,
+      0.11268580374849936,
+      0.09727296770403132,
+      0.10861098057650724,
+      0.08278377470601896,
+      0.06449173887128631
+    ],
+    "final_state_rank_correlation": 0.9948680351906156,
+    "min_gap_between_final_states_uA": {
+      "data": 0.010829999999999895,
+      "model": 0.0033180462848640957
+    },
+    "worst_final_sequence": {
+      "bits": "11110",
+      "data_uA": 2.79034,
+      "model_uA": 2.569085228996095
+    }
+  },
+  "lif_excitation": {
+    "fig4b_fit": {
+      "envelope_uA": {
+        "rmse": 0.024999726902406247,
+        "max_abs_err": 0.04647746804026465,
+        "r2": 0.992776883208206,
+        "n": 60
+      },
+      "first_fire_pulse_index_data": [
+        28,
+        25
+      ],
+      "first_fire_pulse_index_model": [
+        27,
+        27
+      ],
+      "self_reset_uA": {
+        "rmse": 0.04708476206898358,
+        "max_abs_err": 0.1736917631885171,
+        "r2": 0.9860768183771452,
+        "n": 786
+      }
+    },
+    "fig4c_vbase0_holdout": {
+      "envelope_uA": {
+        "rmse": 0.09064734987208004,
+        "max_abs_err": 0.13976647832723899,
+        "r2": 0.8783150028832499,
+        "n": 60
+      },
+      "first_fire_pulse_index_data": [
+        null,
+        null
+      ],
+      "first_fire_pulse_index_model": [
+        27,
+        27
+      ],
+      "self_reset_uA": {
+        "rmse": 0.2260705276232914,
+        "max_abs_err": 0.6083951636159823,
+        "r2": 0.3699853605462412,
+        "n": 748
+      }
+    },
+    "fig4g_train1_holdout": {
+      "N1": {
+        "rmse": 0.43402527037292304,
+        "max_abs_err": 0.9853735419006493,
+        "r2": 0.11589678503868084,
+        "n": 30
+      },
+      "N2": {
+        "rmse": 0.43922995781303165,
+        "max_abs_err": 0.9762035419006496,
+        "r2": 0.08168548875329074,
+        "n": 30
+      },
+      "N3": {
+        "rmse": 0.4256422302304859,
+        "max_abs_err": 0.9499835419006493,
+        "r2": 0.12891996204511325,
+        "n": 30
+      },
+      "N4": {
+        "rmse": 0.4263021885991679,
+        "max_abs_err": 0.9380685419006496,
+        "r2": 0.1399468902180092,
+        "n": 30
+      },
+      "N5": {
+        "rmse": 0.42139364370053356,
+        "max_abs_err": 0.9524435419006494,
+        "r2": 0.15765208394360108,
+        "n": 30
+      }
+    },
+    "trend_supp_fig18_reset_time": {
+      "t_reset_1ms": {
+        "train2_first_fire_pulse": 23,
+        "train2_first_pulse_uA": 4.827393184918795,
+        "figure_read_train2_first_pulse_uA": 5.6
+      },
+      "t_reset_2ms": {
+        "train2_first_fire_pulse": 26,
+        "train2_first_pulse_uA": 4.769082958653963,
+        "figure_read_train2_first_pulse_uA": 5.3
+      },
+      "t_reset_3ms": {
+        "train2_first_fire_pulse": 27,
+        "train2_first_pulse_uA": 4.765951086992192
+      }
+    },
+    "trend_supp_fig19_pulse_delay": {
+      "delay_0.01ms": {
+        "last_pulse_uA": 5.87433295825847,
+        "first_fire_pulse": 27
+      },
+      "delay_0.5ms": {
+        "last_pulse_uA": 4.790790803766448,
+        "first_fire_pulse": null,
+        "figure_read_uA": 4.9
+      },
+      "delay_1ms": {
+        "last_pulse_uA": 4.769745582270361,
+        "first_fire_pulse": null,
+        "figure_read_uA": 4.6
+      }
+    },
+    "trend_checks_pass": {
+      "shorter_reset_fires_with_fewer_or_equal_pulses": true,
+      "longer_delay_less_integration": true
+    }
+  },
+  "tg_inhibition": {
+    "status": "experimental",
+    "blocked_without_allow_experimental": true,
+    "id_post_less_than_id_pre_in_domain": true,
+    "n_checked_states": 71,
+    "retention": 0.6373611709188335,
+    "id_pre_domain_A": [
+      1.714046299697372e-07,
+      9.064380921948489e-07
+    ],
+    "fig4g_second_train_differences": {
+      "N2_minus_N1": {
+        "data_first_pulse_uA": -0.20797,
+        "model_first_pulse_uA": -0.015445194952784302,
+        "data_mean_uA": -0.10185346153846143,
+        "model_mean_uA": -0.014322670562738104
+      },
+      "N3_minus_N1": {
+        "data_first_pulse_uA": -0.30252499999999927,
+        "model_first_pulse_uA": -0.02338921042790251,
+        "data_mean_uA": -0.14959538461538446,
+        "model_mean_uA": -0.023620645744114727
+      },
+      "N4_minus_N1": {
+        "data_first_pulse_uA": -0.3895549999999999,
+        "model_first_pulse_uA": -0.027461615521842113,
+        "data_mean_uA": -0.21271423076923074,
+        "model_mean_uA": -0.029831471938209207
+      },
+      "N5_minus_N1": {
+        "data_first_pulse_uA": -0.4784100000000002,
+        "model_first_pulse_uA": -0.029532868412583502,
+        "data_mean_uA": -0.2626346153846154,
+        "model_mean_uA": -0.03407978452034199
+      }
+    },
+    "missing_evidence": "Fig.4e-g source data are blank (0 A) during the 1 ms reset window, so I_D right before/after the inhibitory pulse is not measured, and there is no no-inhibition control at t_reset = 1 ms. Retention was fitted to N-vs-N=1 differences of the second excitation train; the v1 state model reproduces only a small part of the measured difference, so the value is not identifiable."
+  }
+}

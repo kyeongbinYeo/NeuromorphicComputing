@@ -1,0 +1,170 @@
+{
+  "status": "experimental (not identifiable from source data)",
+  "retention_best_fit": 0.6373611709188335,
+  "enabled_by_default": false,
+  "id_pre_domain_A": [
+    1.714046299697372e-07,
+    9.064380921948489e-07
+  ],
+  "identifiability": {
+    "diff_rmse_uA_best_fit": 0.18699989042218423,
+    "diff_rmse_uA_retention_1_no_effect": 0.27807131585205014,
+    "diff_rmse_uA_retention_0_full_reset": 0.20920109411024368
+  },
+  "per_N": {
+    "N1": {
+      "id_pre_A": [
+        5.157003734759661e-07
+      ],
+      "train2_first_pulse_diff_vs_N1_uA": {
+        "data": 0.0,
+        "model": 0.0
+      },
+      "train2_last_pulse_diff_vs_N1_uA": {
+        "data": 0.0,
+        "model": 0.0
+      }
+    },
+    "N2": {
+      "id_pre_A": [
+        5.886568969883656e-07,
+        3.9339943790816446e-07
+      ],
+      "train2_first_pulse_diff_vs_N1_uA": {
+        "data": -0.20797,
+        "model": -0.015445194952784302
+      },
+      "train2_last_pulse_diff_vs_N1_uA": {
+        "data": -0.04309500000000098,
+        "model": -0.015377300651636127
+      }
+    },
+    "N3": {
+      "id_pre_A": [
+        6.73378081861395e-07,
+        4.4666784157534657e-07,
+        3.041205708045282e-07
+      ],
+      "train2_first_pulse_diff_vs_N1_uA": {
+        "data": -0.30252499999999927,
+        "model": -0.02338921042790251
+      },
+      "train2_last_pulse_diff_vs_N1_uA": {
+        "data": -0.08379500000000044,
+        "model": -0.026186787683528792
+      }
+    },
+    "N4": {
+      "id_pre_A": [
+        7.718154353500331e-07,
+        5.085549113075148e-07,
+        3.430291902898415e-07,
+        2.3895417230125e-07
+      ],
+      "train2_first_pulse_diff_vs_N1_uA": {
+        "data": -0.3895549999999999,
+        "model": -0.027461615521842113
+      },
+      "train2_last_pulse_diff_vs_N1_uA": {
+        "data": -0.10748500000000089,
+        "model": -0.033857397735616926
+      }
+    },
+    "N5": {
+      "id_pre_A": [
+        8.864380921948489e-07,
+        5.805930838393845e-07,
+        3.883062328776637e-07,
+        2.674127945028808e-07,
+        1.914046299697372e-07
+      ],
+      "train2_first_pulse_diff_vs_N1_uA": {
+        "data": -0.4784100000000002,
+        "model": -0.029532868412583502
+      },
+      "train2_last_pulse_diff_vs_N1_uA": {
+        "data": -0.15504499999999996,
+        "model": -0.03934941006846998
+      }
+    }
+  },
+  "data_trend_model_free": {
+    "fig4e_500us_by_vinh": {
+      "fig4e_vinh_1V": {
+        "train1_last_uA": 5.64565,
+        "train2_first3_mean_uA": 5.115766666666667,
+        "train2_last_uA": 5.5854
+      },
+      "fig4e_vinh_2V": {
+        "train1_last_uA": 5.62835,
+        "train2_first3_mean_uA": 5.005236666666667,
+        "train2_last_uA": 5.535
+      },
+      "fig4e_vinh_3V": {
+        "train1_last_uA": 5.6105,
+        "train2_first3_mean_uA": 4.887043333333334,
+        "train2_last_uA": 5.4455800000000005
+      },
+      "fig4e_vinh_4V": {
+        "train1_last_uA": 5.62941,
+        "train2_first3_mean_uA": 4.787973333333333,
+        "train2_last_uA": 5.45858
+      },
+      "fig4e_vinh_5V": {
+        "train1_last_uA": 5.6331299999999995,
+        "train2_first3_mean_uA": 4.688126666666666,
+        "train2_last_uA": 5.410710000000001
+      }
+    },
+    "fig4f_3V_by_width": {
+      "fig4f_width_10us": {
+        "train1_last_uA": 5.62273,
+        "train2_first3_mean_uA": 5.4619800000000005,
+        "train2_last_uA": 5.69078
+      },
+      "fig4f_width_50us": {
+        "train1_last_uA": 5.62645,
+        "train2_first3_mean_uA": 5.402206666666666,
+        "train2_last_uA": 5.65282
+      },
+      "fig4f_width_100us": {
+        "train1_last_uA": 5.643330000000001,
+        "train2_first3_mean_uA": 5.313183333333335,
+        "train2_last_uA": 5.62941
+      },
+      "fig4f_width_500us": {
+        "train1_last_uA": 5.62378,
+        "train2_first3_mean_uA": 4.8817,
+        "train2_last_uA": 5.46526
+      }
+    },
+    "fig4g_5V_100us_by_N": {
+      "fig4g_N1": {
+        "train1_last_uA": 5.67875,
+        "train2_first3_mean_uA": 5.228266666666666,
+        "train2_last_uA": 5.58948
+      },
+      "fig4g_N2": {
+        "train1_last_uA": 5.6287,
+        "train2_first3_mean_uA": 5.043993333333335,
+        "train2_last_uA": 5.54533
+      },
+      "fig4g_N3": {
+        "train1_last_uA": 5.64649,
+        "train2_first3_mean_uA": 4.9729,
+        "train2_last_uA": 5.50421
+      },
+      "fig4g_N4": {
+        "train1_last_uA": 5.64705,
+        "train2_first3_mean_uA": 4.878396666666667,
+        "train2_last_uA": 5.4827
+      },
+      "fig4g_N5": {
+        "train1_last_uA": 5.66076,
+        "train2_first3_mean_uA": 4.812316666666666,
+        "train2_last_uA": 5.43018
+      }
+    }
+  },
+  "missing_evidence": "Fig.4e-g source data are blank (0 A) during the 1 ms reset window, so I_D right before/after the inhibitory pulse is not measured, and there is no no-inhibition control at t_reset = 1 ms. Retention was fitted to N-vs-N=1 differences of the second excitation train; the v1 state model reproduces only a small part of the measured difference, so the value is not identifiable."
+}

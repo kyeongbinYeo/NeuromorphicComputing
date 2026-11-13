@@ -1,0 +1,180 @@
+{
+  "version": "v1",
+  "units": "SI (s, A, V)",
+  "modes": {
+    "reservoir": {
+      "baseline_A": 1.00904175e-06,
+      "relaxation": {
+        "fast_share": 0.10294161892952092,
+        "tau_fast_s": 0.0013131649260006175,
+        "tau_slow_s": {
+          "x_excess_A": [
+            5e-07,
+            1.5e-06,
+            3e-06
+          ],
+          "y_s": [
+            0.006310596759432248,
+            0.020870895384287724,
+            0.011607722971825536
+          ]
+        }
+      },
+      "bg_update": {
+        "voltage_V": 4.0,
+        "width_s": 0.0001,
+        "delta_id_A": {
+          "x_id_pre_A": [
+            1.00904175e-06,
+            1.60904175e-06,
+            2.20904175e-06,
+            2.8090417499999997e-06
+          ],
+          "y_A": [
+            8.929447216557082e-07,
+            8.414415841593353e-07,
+            8.414415774358467e-07,
+            7.740384216798189e-07
+          ]
+        }
+      },
+      "tg_modulation": {
+        "x_vtg_V": [
+          0.0,
+          1.5,
+          3.0,
+          5.0
+        ],
+        "y_gain": [
+          1.0,
+          0.8428187797189197,
+          0.6983492604148677,
+          0.6027351416499582
+        ]
+      }
+    },
+    "lif": {
+      "baseline_A": 6.268641999999998e-08,
+      "relaxation": {
+        "fast_share": 0.4657705961101373,
+        "tau_fast_s": 7.238899588853596e-05,
+        "tau_slow_s": {
+          "x_excess_A": [
+            0.0,
+            3e-06
+          ],
+          "y_s": [
+            0.0007367041952452167,
+            0.0007367041952452167
+          ]
+        }
+      },
+      "bg_update": {
+        "voltage_V": 2.5,
+        "width_s": 0.0005,
+        "delta_id_A": {
+          "x_id_pre_A": [
+            6.268641999999998e-08,
+            6e-07,
+            9e-07,
+            1.2e-06,
+            1.5e-06,
+            1.8e-06,
+            2.1e-06
+          ],
+          "y_A": [
+            6.942983038452702e-07,
+            2.7845916802811336e-07,
+            1.5642818770318321e-07,
+            1.2095155899389009e-07,
+            9.769317306199488e-08,
+            6.994510511936268e-08,
+            6.431307123233475e-08
+          ]
+        }
+      },
+      "on_state_offset_A": 4.008943818055379e-06,
+      "tg_inhibition": {
+        "voltage_V": 5.0,
+        "width_s": 0.0001,
+        "retention": 0.6373611709188335,
+        "id_pre_domain_A": [
+          1.714046299697372e-07,
+          9.064380921948489e-07
+        ],
+        "status": "experimental",
+        "enabled_by_default": false,
+        "note": "Fig.4e-g source data are blank (0 A) during the 1 ms reset window, so I_D right before/after the inhibitory pulse is not measured, and there is no no-inhibition control at t_reset = 1 ms. Retention was fitted to N-vs-N=1 differences of the second excitation train; the v1 state model reproduces only a small part of the measured difference, so the value is not identifiable."
+      }
+    }
+  },
+  "provenance": {
+    "paper": "Analog reservoir computing via ferroelectric mixed phase boundary transistors, Nat. Commun. 15, 9147 (2024), doi:10.1038/s41467-024-53321-2",
+    "source_data_file": "Analog reservoir computing via ferroelectric_Source data.xlsx (sheets Fig.3, Fig.4) → data/*.csv via data/extract_source_data.py",
+    "reservoir.baseline_A": {
+      "figure": "Fig.3h/3i/3j pulse number 0",
+      "method": "mean (measured)",
+      "data": [
+        "data/bg_update/fig3h_states.csv",
+        "data/tg_modulation/fig3i_states.csv",
+        "data/tg_modulation/fig3j_states.csv"
+      ]
+    },
+    "reservoir.relaxation": {
+      "figure": "Fig.3h (16x5 states) + Fig.3f 4.0/4.5 V decay shape",
+      "method": "joint least squares with reservoir.bg_update; tau_slow is a PCHIP table over post-event excess current",
+      "script": "fitting/fit_bg_update.py",
+      "fig3f_shape_rmse": {
+        "4.0": 0.01398223212429885,
+        "4.5": 0.010701216922777231
+      }
+    },
+    "reservoir.bg_update.delta_id_A": {
+      "figure": "Fig.3h",
+      "method": "PCHIP table over I_D before the pulse, constrained non-increasing, fitted jointly",
+      "script": "fitting/fit_bg_update.py",
+      "fig3h_fit_rmse_uA": 0.034791718577813935
+    },
+    "reservoir.tg_modulation": {
+      "figure": "Fig.3i (TG 5.0/3.0/1.5/0 V schedule)",
+      "method": "multiplicative gain M(V_TG), M(0)=1, PCHIP; device fixed",
+      "script": "fitting/fit_tg_modulation.py",
+      "fig3i_fit_rmse_uA": 0.061493712186072476,
+      "hold_out": "Fig.3j (validation/validate_fig3j.py)"
+    },
+    "lif.baseline_A": {
+      "figure": "Fig.4b",
+      "method": "mean rest current before the first train (measured)"
+    },
+    "lif.relaxation + lif.bg_update + lif.on_state_offset_A": {
+      "figure": "Fig.4b (envelope of 60 pulses + two self-reset curves)",
+      "method": "joint least squares; on-state current = rest current + constant offset (assumption)",
+      "script": "fitting/fit_lif_excitation.py",
+      "fig4b_envelope_rmse_uA": 0.02499972690240625,
+      "fig4b_self_reset_rmse_uA": 0.0457882756691789,
+      "hold_out": "Fig.4c V_base = 0 V, Fig.4g first train (validation/validate_lif_excitation.py)"
+    },
+    "lif.tg_inhibition": {
+      "figure": "Fig.4g (N = 1..5, 5.0 V, 100 us)",
+      "method": "best-fit retention from N-vs-N=1 differences of the second train",
+      "status": "experimental (not identifiable from source data)",
+      "enabled_by_default": false,
+      "identifiability": {
+        "diff_rmse_uA_best_fit": 0.18699989042218423,
+        "diff_rmse_uA_retention_1_no_effect": 0.27807131585205014,
+        "diff_rmse_uA_retention_0_full_reset": 0.20920109411024368
+      },
+      "script": "fitting/fit_tg_inhibition.py"
+    },
+    "constants_from_paper_text": {
+      "V_DS_V": "0.1 (Fig.3, Fig.4 captions)",
+      "reservoir_pulse": "4.0 V, 100 us, timeframe 3 ms (Fig.3h-j captions)",
+      "fig3i_tg_schedule_V": "[5.0, 3.0, 1.5, 0.0] (Fig.3i drawing)",
+      "fig3j_tg_schedule_V": "[1.0, 5.0, 3.0, 2.0, 0.0] (Fig.3j drawing)",
+      "lif_excitation": "2.5 V, 500 us, delay 10 us, TG baseline -3.0 V (Fig.4a,b)",
+      "lif_inhibition": "5.0 V, 100 us, delay 10 us (Fig.4g)",
+      "lif_I_th": "5.83 uA read from the Fig.4b dashed line (lif.py FIG4B_ITH_A)",
+      "read_delay_after_pulse": "0.2 ms (assumption: first Fig.3f sample)"
+    }
+  }
+}
