@@ -1,0 +1,10 @@
+{
+  "kind": "replay fidelity, not independent predictive validation",
+  "states": 32,
+  "transitions": 31,
+  "rmse_S": 0.0,
+  "source_xlsx_match": true,
+  "first_pre_state_unavailable": true,
+  "pgm_direction_checked_transitions": 15,
+  "ers_direction_checked_transitions": 16
+}

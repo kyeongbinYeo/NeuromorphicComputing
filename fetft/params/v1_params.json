@@ -1,0 +1,14 @@
+{
+  "model": "Fig.2f measured protocol replay",
+  "status": "empirical protocol replay, not predictive",
+  "pulse_width_s": 0.00001,
+  "read_vgs_V": 1.0,
+  "read_vds_V": 0.1,
+  "source_workbook": "Analog reservoir computing via ferroelectric_Source data.xlsx",
+  "sheet": "Fig.2",
+  "fig2f_cells": "I3:J34",
+  "fig2g_cells": "L3:M802",
+  "paper": "10.1038/s41467-024-53321-2",
+  "conditions_provenance": "Paper Fig.2f and main text; voltage schedule aligned by pulse index",
+  "first_pre_pulse_state": "not available"
+}
