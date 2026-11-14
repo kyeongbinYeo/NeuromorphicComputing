@@ -134,6 +134,35 @@ LIF 펄스 중 전류 = 휴지 I_D + on_state_offset
 
 ## 6. Known limitations
 
+### Nominal LIF Model A (experimental)
+
+`MPBTFT(mode="lif", allow_experimental=True, inhibition_model="model_a")` selects an
+idealized alternative to the default retention model. `LIFNeuron.inhibit_train(t, n)`
+submits one atomic sequence of 1–5 pulses; the nominal resting state is reset at the
+end of the entire sequence and its count modifies only the next BG update. A standalone
+`apply_tg_inhibition` is a complete N=1 sequence; multiple separate calls do not form
+one N-pulse sequence. Intermediate sequence currents are not modeled or readable.
+Use `apply_tg_inhibition_sequence(t, n, ...)` to specify a sequence directly.
+`initialize()` clears the pending modifier. Experimental opt-in is required.
+
+Model A is a nominal, idealized LIF inhibition model. The Source Data does not provide
+actual resting current during the reset interval; zeros there are not current measurements.
+Reset to baseline at the end of the inhibition sequence is a modeling assumption.
+
+`params/lif_model_a.json` stores effective one-shot post-inhibition first-excitation
+multipliers under the compatibility key `gain`. Each N-dependent multiplier applies
+only to the first BG update after reset; it is not a physical gain of the TG inhibition.
+It can exceed one without meaning TG is excitatory: it includes an effective calibration
+factor between the Fig.4b nominal LIF model and the Fig.4g measurement. It multiplies
+the baseline BG increment, not total current. `fitting/fit_lif_model_a.py` fits only
+the five second-train first-pulse envelopes. The fit depends on the v1 LIF baseline,
+BG update and on-state offset; refit if those parameters change.
+
+`validation/validate_lif_model_a.py` evaluates all 13 pulses and reports pulses 2–13
+separately as validation, not fitting. At larger N, Model A partially underestimates
+the separation of the later trajectories. It also reports H(N) = G(N)/G(1) as a
+diagnostic relative multiplier; H does not enter runtime calculations.
+
 1. `state = I_D`는 behavioral 근사다. 같은 I_D라도 분극·trap 이력이 같다고 보장할 수 없다.
    - LIF에서 실제로 드러난다. 휴지 전류는 1 ms 안에 거의 다 빠지지만, 1 ms 뒤 다시 흥분시키면
      첫 펄스열보다 높게 시작한다 (Supp. Fig.18a, Fig.4g). 모델은 이 숨은 잔류를 과소평가한다.

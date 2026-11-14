@@ -1,0 +1,30 @@
+{
+  "description": "Nominal experimental Model A; fit only second-train first-pulse envelope, N=1..5.",
+  "gain_meaning": "Effective one-shot multiplier applied to the first BG update after inhibition; not a physical TG gain. Includes calibration between the Fig.4b nominal model and Fig.4g measurement.",
+  "source": "data/tg_inhibition/fig4g_N1.csv through fig4g_N5.csv; existing find_trains/envelope",
+  "method": "equal-weight non-increasing isotonic least squares, gains constrained nonnegative",
+  "baseline_A": 6.268641999999998e-08,
+  "on_state_offset_A": 4.008943818055379e-06,
+  "baseline_bg_delta_A": 6.942983038452702e-07,
+  "raw_first_pulse_A": [
+    5.16453e-06,
+    4.95656e-06,
+    4.8620050000000006e-06,
+    4.774975e-06,
+    4.68612e-06
+  ],
+  "monotonic_fitted_first_pulse_A": [
+    5.16453e-06,
+    4.95656e-06,
+    4.8620050000000006e-06,
+    4.774975e-06,
+    4.68612e-06
+  ],
+  "gain": [
+    1.5741069161364134,
+    1.2745670802356366,
+    1.1383792205270356,
+    1.0130296416529443,
+    0.8850515096196526
+  ]
+}

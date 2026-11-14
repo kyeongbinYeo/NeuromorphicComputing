@@ -59,16 +59,21 @@ class MPBTFT:
     """
 
     def __init__(self, params: MPBTFTParams | None = None, mode: str = "reservoir",
-                 time_s: float = 0.0, strict: bool = True, allow_experimental: bool = False):
+                 time_s: float = 0.0, strict: bool = True, allow_experimental: bool = False,
+                 inhibition_model: str = "retention"):
         """strict=True: 보정 범위 밖 I_D에서 오류. False면 경고 후 가장자리 값 사용.
         allow_experimental=True: 데이터로 충분히 뒷받침되지 않는 기능(TG 억제)을 켠다.
         """
         if mode not in MODES:
             raise UnsupportedOperatingPointError(f"Unknown mode '{mode}'. Use one of {MODES}.")
+        if inhibition_model not in ("retention", "model_a") or (mode != "lif" and inhibition_model != "retention"):
+            raise ValueError("inhibition_model must be 'retention', or 'model_a' in LIF mode.")
         self.params = params if params is not None else MPBTFTParams.load()
         self.mode = mode
         self.strict = strict
         self.allow_experimental = allow_experimental
+        self.inhibition_model = inhibition_model
+        self._first_excitation_gains = self.params.load_model_a_gains() if inhibition_model == "model_a" else None
         self._p = self.params.mode(mode)
         self.initialize(time_s)
 
@@ -84,6 +89,7 @@ class MPBTFT:
         self._tau_slow = self._p.relaxation.tau_slow_s(0.0)
         self._t_last = float(time_s)
         self._last_event: GateEvent | None = None
+        self._pending_inhibition_count = 0
 
     @property
     def baseline_current_A(self) -> float:
@@ -102,6 +108,20 @@ class MPBTFT:
         dt = self._elapsed_for_read(time_s)
         f, s = self._relaxed(dt)
         return self._p.baseline_A + f + s
+
+    def state_snapshot(self, time_s: float) -> dict:
+        """Return the relaxed state at time_s without committing it."""
+        dt = self._elapsed_for_read(time_s)
+        fast, slow = self._relaxed(dt)
+        return {
+            "time_s": time_s,
+            "mode": self.mode,
+            "current_A": self._p.baseline_A + fast + slow,
+            "baseline_A": self._p.baseline_A,
+            "fast_A": fast,
+            "slow_A": slow,
+            "tau_slow_s": self._tau_slow,
+        }
 
     def apply_bg_pulse(self, time_s: float, voltage_V: float, width_s: float,
                        tg_voltage_V: float | None = None) -> float:
@@ -123,9 +143,13 @@ class MPBTFT:
         gain = 1.0
         if self.mode == "reservoir":
             gain = self._p.tg_modulation(tg_voltage_V)
+        elif self._pending_inhibition_count:
+            # Effective one-shot multiplier on BG update, not a physical TG gain.
+            gain = self._first_excitation_gains[self._pending_inhibition_count - 1]
         delta = table(id_pre) * gain
         w = self._p.relaxation.fast_share
         self._commit(f + w * delta, s + (1.0 - w) * delta, time_s + width_s)
+        self._pending_inhibition_count = 0
 
         id_post = self._p.baseline_A + self._fast + self._slow
         during = id_post + self._p.on_state_offset_A if self.mode == "lif" else None
@@ -140,6 +164,8 @@ class MPBTFT:
         감소량을 데이터로 정할 수 없다. 파라미터 파일의 retention은 Fig.4g에서 얻은 best-fit 값이지만
         식별성이 낮아, allow_experimental=True일 때만 쓴다. README "Known limitations" 참고.
         """
+        if self.inhibition_model == "model_a":
+            return self.apply_tg_inhibition_sequence(time_s, 1, voltage_V, width_s, 0.0)
         check_tg_inhibition(self.mode, voltage_V, width_s)
         self._check_event_start(time_s, "tg_inhibition")
         inh = self._p.tg_inhibition
@@ -163,6 +189,32 @@ class MPBTFT:
         self._last_event = GateEvent("tg_inhibition", time_s, time_s + width_s, voltage_V, width_s,
                                      voltage_V, id_pre, id_post, None)
         return id_post
+
+    def apply_tg_inhibition_sequence(self, time_s: float, n: int, voltage_V: float = 5.0,
+                                     width_s: float = 100e-6, delay_s: float = 10e-6) -> float:
+        """Model A: commit one nominal reset at the end of a known 1..5 pulse sequence.
+
+        Intermediate pulse currents are unobserved; this is an atomic protocol event.
+        A separate call denotes a separate sequence, including when n=1.
+        """
+        if self.inhibition_model != "model_a":
+            raise ValueError("Sequence API requires inhibition_model='model_a'.")
+        check_tg_inhibition(self.mode, voltage_V, width_s)
+        if not self.allow_experimental:
+            raise UncalibratedFeatureError("Model A is nominal and requires allow_experimental=True.")
+        if isinstance(n, bool) or not isinstance(n, int) or not 1 <= n <= 5:
+            raise ValueError("Model A supports 1..5 inhibitory pulses per sequence.")
+        if not math.isfinite(delay_s) or delay_s < 0:
+            raise ValueError("delay_s must be finite and nonnegative.")
+        self._check_event_start(time_s, "tg_inhibition")
+        f, s = self._relaxed(time_s - self._t_last)
+        id_pre = self._p.baseline_A + f + s
+        end_s = time_s + n * width_s + (n - 1) * delay_s
+        self._commit(0.0, 0.0, end_s)
+        self._pending_inhibition_count = n
+        self._last_event = GateEvent("tg_inhibition", time_s, end_s, voltage_V, end_s - time_s,
+                                     voltage_V, id_pre, self._p.baseline_A, None)
+        return self._p.baseline_A
 
     # ----------------------------------------------------------------- private
     def _relaxed(self, dt: float):

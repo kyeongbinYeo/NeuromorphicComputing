@@ -105,6 +105,43 @@ def test_number_of_reads_does_not_change_trajectory():
     assert d1.read_current(6e-3) == d2.read_current(6e-3)
 
 
+@pytest.mark.parametrize("mode,args", [("reservoir", (4.0, W_RES, 0.0)), ("lif", (2.5, W_EXC, -3.0))])
+def test_snapshot_is_pure_and_matches_current(mode, args):
+    d = MPBTFT(P, mode=mode)
+    d.apply_bg_pulse(0.0, *args)
+    t = args[1] + 0.2e-3
+    before = d.read_current(t)
+    first = d.state_snapshot(t)
+    assert d.state_snapshot(t) == first
+    assert d.read_current(t) == before == first["current_A"]
+    assert first["current_A"] == pytest.approx(first["baseline_A"] + first["fast_A"] + first["slow_A"])
+    assert first["mode"] == mode and first["time_s"] == t
+    assert first["fast_A"] > 0 and first["slow_A"] > 0
+    assert first["tau_slow_s"] > 0
+
+
+@pytest.mark.parametrize("mode,args", [("reservoir", (4.0, W_RES, 0.0)), ("lif", (2.5, W_EXC, -3.0))])
+def test_snapshots_do_not_change_later_pulse_trajectory(mode, args):
+    d1, d2 = MPBTFT(P, mode=mode), MPBTFT(P, mode=mode)
+    for d in (d1, d2):
+        d.apply_bg_pulse(0.0, *args)
+    for k in range(100):
+        d2.state_snapshot(args[1] + k * 10e-6)
+    for d in (d1, d2):
+        d.apply_bg_pulse(3e-3, *args)
+    assert d1.state_snapshot(6e-3) == d2.state_snapshot(6e-3)
+
+
+@pytest.mark.parametrize("mode,args", [("reservoir", (4.0, W_RES, 0.0)), ("lif", (2.5, W_EXC, -3.0))])
+def test_snapshot_obeys_read_time_rules(mode, args):
+    d = MPBTFT(P, mode=mode)
+    d.apply_bg_pulse(1e-3, *args)
+    with pytest.raises(ValueError):
+        d.state_snapshot(0.0)
+    with pytest.raises(ValueError, match="in progress"):
+        d.state_snapshot(1e-3 + args[1] / 2)
+
+
 def test_read_any_time_without_input():
     d = res()
     d.apply_bg_pulse(0.0, 4.0, W_RES, 0.0)
@@ -250,3 +287,90 @@ def test_reservoir_helper_runs_paper_schedule():
     assert len(out) == 4 and out[-1] > out[1]
     feats = Reservoir(2, P, tg_voltages_V=[5.0, 3.0, 1.5, 0.0]).encode(["1011", "0001"])
     assert feats[0] != feats[1]
+
+
+def model_a():
+    return MPBTFT(P, mode="lif", allow_experimental=True, inhibition_model="model_a")
+
+
+def test_model_a_gains_monotonic_and_fit_data():
+    gains = P.load_model_a_gains()
+    assert len(gains) == 5
+    assert all(a >= b >= 0 for a, b in zip(gains, gains[1:]))
+    assert gains[0] > gains[-1]
+
+
+@pytest.mark.parametrize("n", [1, 2, 3, 4, 5])
+def test_model_a_sequence_reset_and_one_shot(n):
+    d = model_a()
+    LIFNeuron(d).excite_train(0.0, 10)
+    start = d.last_update_time_s + 10e-6
+    end = LIFNeuron(d).inhibit_train(start, n)
+    assert end == pytest.approx(start + n * 100e-6 + (n - 1) * 10e-6)
+    assert d.last_event.start_s == start and d.last_event.end_s == end
+    assert d.last_event.id_pre_A > d.baseline_current_A
+    assert d.state_snapshot(end)["current_A"] == d.baseline_current_A
+    assert d.state_snapshot(end)["fast_A"] == d.state_snapshot(end)["slow_A"] == 0
+    t = end + 10e-6
+    d.apply_bg_pulse(t, 2.5, W_EXC, -3.0)
+    e = d.last_event
+    assert e.id_post_A - e.id_pre_A == pytest.approx(P.lif.bg_update.delta_id_A(e.id_pre_A) * P.load_model_a_gains()[n-1])
+    assert d._pending_inhibition_count == 0
+    d.apply_bg_pulse(t + W_EXC + 10e-6, 2.5, W_EXC, -3.0)
+    e = d.last_event
+    assert e.id_post_A - e.id_pre_A == pytest.approx(P.lif.bg_update.delta_id_A(e.id_pre_A))
+
+
+def test_model_a_initialize_clears_pending():
+    d = model_a()
+    d.apply_tg_inhibition_sequence(0.0, 5)
+    d.initialize(1.0)
+    d.apply_bg_pulse(1.0, 2.5, W_EXC, -3.0)
+    e = d.last_event
+    assert e.id_post_A - e.id_pre_A == pytest.approx(P.lif.bg_update.delta_id_A(e.id_pre_A))
+
+
+def test_model_a_n_changes_first_and_later_states():
+    outputs = []
+    for n in (1, 5):
+        d = model_a()
+        end = LIFNeuron(d).inhibit_train(0.0, n)
+        currents, _ = LIFNeuron(d).excite_train(end + 10e-6, 3)
+        outputs.append(currents)
+    assert all(a > b for a, b in zip(*outputs))
+
+
+def test_model_a_without_inhibition_matches_existing_lif():
+    old, new = lif(), model_a()
+    a, _ = LIFNeuron(old).excite_train(0.0, 30)
+    b, _ = LIFNeuron(new).excite_train(0.0, 30)
+    assert a == b
+    assert old.state_snapshot(old.last_update_time_s + 1e-3) == new.state_snapshot(new.last_update_time_s + 1e-3)
+
+
+def test_model_a_sequence_validation_and_opt_in():
+    d = MPBTFT(P, mode="lif", inhibition_model="model_a")
+    with pytest.raises(UncalibratedFeatureError):
+        d.apply_tg_inhibition_sequence(0.0, 1)
+    d = model_a()
+    for n in (0, 6, True, 1.5):
+        with pytest.raises(ValueError):
+            d.apply_tg_inhibition_sequence(0.0, n)
+    with pytest.raises(ValueError):
+        d.apply_tg_inhibition_sequence(0.0, 2, delay_s=-1e-6)
+    with pytest.raises(ValueError):
+        MPBTFT(P, mode="reservoir", inhibition_model="model_a")
+
+
+def test_model_a_single_inhibition_is_single_pulse_sequence():
+    d = model_a()
+    d.apply_tg_inhibition(0.0, 5.0, 100e-6)
+    assert d.last_update_time_s == pytest.approx(100e-6)
+    assert d._pending_inhibition_count == 1
+
+
+def test_model_a_fitting_is_reproducible_and_pools_nonmonotonic_data():
+    sys.path.insert(0, str(ROOT / "fitting"))
+    from fit_lif_model_a import fit, monotone_decreasing
+    assert monotone_decreasing([3, 1, 2, 0]).tolist() == [3, 1.5, 1.5, 0]
+    assert fit(P)["gain"] == pytest.approx(P.load_model_a_gains())

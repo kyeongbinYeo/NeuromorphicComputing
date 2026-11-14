@@ -72,6 +72,9 @@ class LIFNeuron:
 
     def inhibit_train(self, t0_s: float, n: int, delay_s: float = INH_DELAY_S) -> float:
         """n개 억제 펄스. 반환: 마지막 펄스 끝 시각."""
+        if self.device.inhibition_model == "model_a":
+            self.device.apply_tg_inhibition_sequence(t0_s, n, INH_VOLTAGE_V, INH_WIDTH_S, delay_s)
+            return self.device.last_update_time_s
         t = t0_s
         for _ in range(n):
             self.inhibit(t)
