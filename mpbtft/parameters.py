@@ -99,6 +99,20 @@ class MPBTFTParams:
     provenance: dict = field(default_factory=dict)
     version: str = "v1"
 
+    @staticmethod
+    def load_model_a_gains(path=None) -> tuple[float, ...]:
+        """Load effective one-shot post-inhibition first-BG-update multipliers.
+
+        The JSON key and method name are retained for compatibility; these are
+        not physical TG gains.
+        """
+        path = Path(path) if path is not None else DEFAULT_PARAMS_PATH.with_name("lif_model_a.json")
+        values = tuple(float(v) for v in json.loads(path.read_text(encoding="utf-8"))["gain"])
+        if (len(values) != 5 or not all(np.isfinite(v) and v >= 0 for v in values)
+                or any(a < b for a, b in zip(values, values[1:]))):
+            raise ValueError("Model A gains must be five finite, nonnegative, non-increasing values.")
+        return values
+
     def mode(self, name: str) -> ModeParams:
         if name == "reservoir":
             return self.reservoir
